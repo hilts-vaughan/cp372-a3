@@ -1,7 +1,10 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Scanner;
+import java.util.concurrent.SynchronousQueue;
 
 /**
  * Implements a Link State Algorithm using Dijkstra's least-cost path graph
@@ -47,6 +50,7 @@ public class Solver {
 		b.addEdge(new GraphEdge(a, 6));
 		b.addEdge(new GraphEdge(c, 10));
 		c.addEdge(new GraphEdge(d, 12));
+		
 		d.addEdge(new GraphEdge(a, 112));
 
 		// Create our structure
@@ -60,22 +64,58 @@ public class Solver {
 			// Set the shortest paths from everyone from the source
 			setShortestPaths(source, nodes);
 
+			List<ArrayList<RouterNode>> totalPaths = new ArrayList<ArrayList<RouterNode>>();
+			Queue<RouterNode> destinations = new LinkedList<RouterNode>();
+			
+			
 			// Now, finish by printing by going getting the list
 			for(RouterNode destination : nodes) {
+				
+				if(destination == source)
+					continue;
 				
 				System.out.println(source + " to " + destination);
 				
 				// Gets the shortest path to the destination from this source
 				List<RouterNode> shortestPath = getShortestPath(destination);
 				
+				totalPaths.add((ArrayList<RouterNode>) shortestPath);				
+				
 				System.out.println(shortestPath);
+				
+				destinations.add(destination);
 			}
 			
+			System.out.println("Forwarding Table for " + source);
+			printForwardingTableForList(totalPaths, destinations);
 
 		}
 
 	}
 
+	private static void printForwardingTableForList(List<ArrayList<RouterNode>> totalPaths, Queue<RouterNode> destinations) {
+		
+	    System.out.format("%17s%17s%17s\n", new Object[] {"To", "Cost", "Next Hop"});		
+	    
+	    for(ArrayList<RouterNode> list : totalPaths) {	    
+	    	
+	    	int cost = 0;
+	    	
+	    	for(RouterNode node : list) {
+	    		cost += node.smallestCost;
+	    	}
+	    	
+	    	// Print the top sections
+	    	System.out.format("%17s", destinations.remove());
+	    	System.out.format("%17s", cost);
+	    	System.out.format("%17s", list.get(0));
+	    	
+	    	System.out.println();
+	    	
+	    }
+	    
+	}
+	
 	private static List<RouterNode> getShortestPath(RouterNode destination) {
 
 		List<RouterNode> order = new ArrayList<RouterNode>();
