@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -87,28 +88,28 @@ public class Solver {
 			}
 			
 			System.out.println("Forwarding Table for " + source);
-			printForwardingTableForList(totalPaths, destinations);
+			printForwardingTableForList(totalPaths, destinations, source);
 
 		}
 
 	}
 
-	private static void printForwardingTableForList(List<ArrayList<RouterNode>> totalPaths, Queue<RouterNode> destinations) {
+	private static void printForwardingTableForList(List<ArrayList<RouterNode>> totalPaths, Queue<RouterNode> destinations, RouterNode source) {
 		
 	    System.out.format("%17s%17s%17s\n", new Object[] {"To", "Cost", "Next Hop"});		
 	    
 	    for(ArrayList<RouterNode> list : totalPaths) {	    
 	    	
-	    	int cost = 0;
-	    	
-	    	for(RouterNode node : list) {
-	    		cost += node.smallestCost;
-	    	}
+
 	    	
 	    	// Print the top sections
-	    	System.out.format("%17s", destinations.remove());
+	    	RouterNode destination = destinations.remove();
+	    	int cost = destination.smallestCost;	
+	    	System.out.format("%17s", destination);
 	    	System.out.format("%17s", cost);
-	    	System.out.format("%17s", list.get(0));
+	    		    	
+	    		System.out.format("%17s", list.get(1));	    	
+	    		
 	    	
 	    	System.out.println();
 	    	
@@ -129,6 +130,11 @@ public class Solver {
 			else
 				current = null;
 		}
+		
+
+		
+		Collections.reverse(order);
+		order.add(destination);
 		
 		return order;
 	}
