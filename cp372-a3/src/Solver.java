@@ -24,12 +24,14 @@ public class Solver {
 	 */
 	public static void main(String[] args) {
 
-		// System.out.println("Please enter the number of rows: ");
-		//
-		// Scanner scanner = new Scanner(System.in);
-		//
-		// // Fetch the next int
-		// int rowsCount = scanner.nextInt();
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Preparing to compute Link State Algorithm...");		
+		System.out.println("Please enter the number of routers: ");
+				
+		
+		// Fetch the next int
+		int routerCount = scanner.nextInt();
+		
 		//
 		// // Get all the rows
 		// System.out.println("Enter the rows: ");
