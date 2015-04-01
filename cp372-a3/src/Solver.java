@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Scanner;
-import java.util.concurrent.SynchronousQueue;
 
 /**
  * Implements a Link State Algorithm using Dijkstra's least-cost path graph
@@ -119,14 +118,22 @@ public class Solver {
 
 		for (ArrayList<RouterNode> list : totalPaths) {
 
+			
 			// Print the top sections
 			RouterNode destination = destinations.remove();
+
+			
 			int cost = destination.smallestCost;
 			System.out.format("%17s", destination);
-			System.out.format("%17s", cost);
 
-			System.out.format("%17s", list.get(1));
-
+			if (list.size() > 0) {
+				list.add(destination);
+				System.out.format("%17s", cost);
+				System.out.format("%17s", list.get(1));
+			} else {
+				System.out.format("%17s", "--");
+				System.out.format("%17s", "Unreachable");
+			}
 			System.out.println();
 
 		}
@@ -148,7 +155,6 @@ public class Solver {
 		}
 
 		Collections.reverse(order);
-		order.add(destination);
 
 		return order;
 	}
