@@ -132,7 +132,7 @@ public class Solver {
 				System.out.format("%17s", list.get(1));
 			} else {
 				System.out.format("%17s", "--");
-				System.out.format("%17s", "Unreachable");
+				System.out.format("%17s", "-1");
 			}
 			System.out.println();
 

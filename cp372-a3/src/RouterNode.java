@@ -11,8 +11,8 @@ import java.util.List;
 public class RouterNode implements Comparable<RouterNode> {
 
 	// This is mostly used for keeping track of RouterNode's internally
-	private static char _internalNameCounter = 'A';
-	private char _name;
+	private static int _internalNameCounter = 1;
+	private int _name;
 	
 	private List<GraphEdge> _edges = new ArrayList<GraphEdge>();
 	
@@ -48,7 +48,7 @@ public class RouterNode implements Comparable<RouterNode> {
 	
 	@Override
 	public String toString() {
-		return Character.toString(_name);
+		return Integer.toString(_name);
 	}
 
 	
