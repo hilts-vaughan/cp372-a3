@@ -25,39 +25,54 @@ public class Solver {
 	public static void main(String[] args) {
 
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Preparing to compute Link State Algorithm...");		
+		System.out.println("Preparing to compute Link State Algorithm...");
 		System.out.println("Please enter the number of routers: ");
-				
-		
+
 		// Fetch the next int
-		int routerCount = scanner.nextInt();
-		
+		int routerCount = Integer.parseInt(scanner.nextLine());
+
 		//
-		// // Get all the rows
-		// System.out.println("Enter the rows: ");
-		// List<String> rows = new ArrayList<String>();
-		// for(int i = 0; i < rowsCount; i++) {
-		// rows.add(scanner.nextLine());
-		// }
-		//
-		// scanner.close();
+		// Get all the rows
+		System.out.println("Enter the rows: ");
+		List<String> rows = new ArrayList<String>();
+		for (int i = 0; i < routerCount; i++) {
+			rows.add(scanner.nextLine());
+		}
+		System.out.println(rows);
+		scanner.close();
+		String[] values;// = String>();//{ a, b, c, d };
 
 		// Add a sample graph we know about
-		RouterNode a = new RouterNode();
-		RouterNode b = new RouterNode();
-		RouterNode c = new RouterNode();
-		RouterNode d = new RouterNode();
+		List<RouterNode> nodes = new ArrayList<RouterNode>();// { a, b, c, d };
+		for (int i = 0; i < routerCount; i++) {
+			RouterNode temp = new RouterNode();
+			nodes.add(temp);
 
-		// Set it up so starting from A you should be able to traverse to D
-		a.addEdge(new GraphEdge(b, 5));
-		b.addEdge(new GraphEdge(a, 6));
-		b.addEdge(new GraphEdge(c, 10));
-		c.addEdge(new GraphEdge(d, 12));
-		
-		d.addEdge(new GraphEdge(a, 112));
+		}
 
+		for (int i = 0; i < routerCount; i++) {
+			String row = rows.get(i);
+			values = row.split(" ");
+			for (int cur = 0; cur < routerCount; cur++) {
+				int cost = Integer.parseInt(values[cur]);
+				if (cost != -1) {
+					nodes.get(i).addEdge(new GraphEdge(nodes.get(cur), (cost)));
+				}
+			}
+		}
+
+		System.out.println(nodes);
+		/*
+		 * RouterNode a = new RouterNode(); RouterNode b = new RouterNode();
+		 * RouterNode c = new RouterNode(); RouterNode d = new RouterNode();
+		 * 
+		 * // Set it up so starting from A you should be able to traverse to D
+		 * a.addEdge(new GraphEdge(b, 5)); b.addEdge(new GraphEdge(a, 6));
+		 * b.addEdge(new GraphEdge(c, 10)); c.addEdge(new GraphEdge(d, 12));
+		 * 
+		 * d.addEdge(new GraphEdge(a, 112));
+		 */
 		// Create our structure
-		RouterNode[] nodes = { a, b, c, d };
 
 		for (RouterNode source : nodes) {
 
@@ -69,26 +84,25 @@ public class Solver {
 
 			List<ArrayList<RouterNode>> totalPaths = new ArrayList<ArrayList<RouterNode>>();
 			Queue<RouterNode> destinations = new LinkedList<RouterNode>();
-			
-			
+
 			// Now, finish by printing by going getting the list
-			for(RouterNode destination : nodes) {
-				
-				if(destination == source)
+			for (RouterNode destination : nodes) {
+
+				if (destination == source)
 					continue;
-				
+
 				System.out.println(source + " to " + destination);
-				
+
 				// Gets the shortest path to the destination from this source
 				List<RouterNode> shortestPath = getShortestPath(destination);
-				
-				totalPaths.add((ArrayList<RouterNode>) shortestPath);				
-				
+
+				totalPaths.add((ArrayList<RouterNode>) shortestPath);
+
 				System.out.println(shortestPath);
-				
+
 				destinations.add(destination);
 			}
-			
+
 			System.out.println("Forwarding Table for " + source);
 			printForwardingTableForList(totalPaths, destinations, source);
 
@@ -96,52 +110,50 @@ public class Solver {
 
 	}
 
-	private static void printForwardingTableForList(List<ArrayList<RouterNode>> totalPaths, Queue<RouterNode> destinations, RouterNode source) {
-		
-	    System.out.format("%17s%17s%17s\n", new Object[] {"To", "Cost", "Next Hop"});		
-	    
-	    for(ArrayList<RouterNode> list : totalPaths) {	    
-	    	
+	private static void printForwardingTableForList(
+			List<ArrayList<RouterNode>> totalPaths,
+			Queue<RouterNode> destinations, RouterNode source) {
 
-	    	
-	    	// Print the top sections
-	    	RouterNode destination = destinations.remove();
-	    	int cost = destination.smallestCost;	
-	    	System.out.format("%17s", destination);
-	    	System.out.format("%17s", cost);
-	    		    	
-	    		System.out.format("%17s", list.get(1));	    	
-	    		
-	    	
-	    	System.out.println();
-	    	
-	    }
-	    
+		System.out.format("%17s%17s%17s\n", new Object[] { "To", "Cost",
+				"Next Hop" });
+
+		for (ArrayList<RouterNode> list : totalPaths) {
+
+			// Print the top sections
+			RouterNode destination = destinations.remove();
+			int cost = destination.smallestCost;
+			System.out.format("%17s", destination);
+			System.out.format("%17s", cost);
+
+			System.out.format("%17s", list.get(1));
+
+			System.out.println();
+
+		}
+
 	}
-	
+
 	private static List<RouterNode> getShortestPath(RouterNode destination) {
 
 		List<RouterNode> order = new ArrayList<RouterNode>();
-		
+
 		RouterNode current = destination.previous;
-		
-		while (current != null) {						
+
+		while (current != null) {
 			order.add(current);
 			if (current.previous != null)
 				current = current.previous;
 			else
 				current = null;
 		}
-		
 
-		
 		Collections.reverse(order);
 		order.add(destination);
-		
+
 		return order;
 	}
 
-	private static void resetDistances(RouterNode[] nodes) {
+	private static void resetDistances(List<RouterNode> nodes) {
 		for (RouterNode node : nodes) {
 			node.smallestCost = Integer.MAX_VALUE;
 			node.previous = null;
@@ -153,7 +165,8 @@ public class Solver {
 	 * 
 	 * @param source
 	 */
-	private static void setShortestPaths(RouterNode source, RouterNode[] nodes) {
+	private static void setShortestPaths(RouterNode source,
+			List<RouterNode> nodes) {
 
 		// The source would obviously have the smallest cost being set to 0 on
 		// itself
