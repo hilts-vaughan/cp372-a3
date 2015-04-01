@@ -11,7 +11,7 @@ import java.util.Scanner;
  * searching. Additionally, produces a forwarding table that is based on the
  * given input.
  * 
- * @author Vaughan Hilts
+ * @author Vaughan Hilts, Brandon Smith
  *
  */
 public class Solver {
@@ -93,7 +93,7 @@ public class Solver {
 				System.out.println(source + " to " + destination);
 
 				// Gets the shortest path to the destination from this source
-				List<RouterNode> shortestPath = getShortestPath(destination);
+				List<RouterNode> shortestPath = getShortestPath(destination, routerCount);
 
 				totalPaths.add((ArrayList<RouterNode>) shortestPath);
 
@@ -140,13 +140,14 @@ public class Solver {
 
 	}
 
-	private static List<RouterNode> getShortestPath(RouterNode destination) {
+	private static List<RouterNode> getShortestPath(RouterNode destination, int routerCount) {
 
 		List<RouterNode> order = new ArrayList<RouterNode>();
 
 		RouterNode current = destination.previous;
-
-		while (current != null) {
+		
+		while (current != null && order.size()<=routerCount) {
+			
 			order.add(current);
 			if (current.previous != null)
 				current = current.previous;
@@ -155,7 +156,9 @@ public class Solver {
 		}
 
 		Collections.reverse(order);
-
+		if (order.size()>routerCount){
+			order=new ArrayList<RouterNode>();
+		}
 		return order;
 	}
 
