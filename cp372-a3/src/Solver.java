@@ -22,14 +22,11 @@ public class Solver {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Preparing to compute Link State Algorithm...");
 		System.out.println("Please enter the number of routers: ");
-
 		// Fetch the next int
 		int routerCount = Integer.parseInt(scanner.nextLine());
-
 		//
 		// Get all the rows
 		System.out.println("Enter the rows: ");
@@ -44,9 +41,8 @@ public class Solver {
 		for (int i = 0; i < routerCount; i++) {
 			RouterNode temp = new RouterNode();
 			nodes.add(temp);
-
 		}
-
+		//populate the graphs edges
 		for (int i = 0; i < routerCount; i++) {
 			String row = rows.get(i);
 			values = row.split(" ");
@@ -61,7 +57,6 @@ public class Solver {
 		// Create our structure
 
 		for (RouterNode source : nodes) {
-
 			// Reset all the distances
 			resetDistances(nodes);
 
@@ -77,20 +72,16 @@ public class Solver {
 				if (destination == source)
 					continue;
 
-
 				// Gets the shortest path to the destination from this source
-				List<RouterNode> shortestPath = getShortestPath(destination, routerCount);
+				List<RouterNode> shortestPath = getShortestPath(destination);
 
 				totalPaths.add((ArrayList<RouterNode>) shortestPath);
 
 				destinations.add(destination);
 			}
-
 			System.out.println("Forwarding Table for " + source);
 			printForwardingTableForList(totalPaths, destinations, source);
-
 		}
-
 	}
 
 	private static void printForwardingTableForList(
@@ -102,11 +93,8 @@ public class Solver {
 
 		for (ArrayList<RouterNode> list : totalPaths) {
 
-			
 			// Print the top sections
 			RouterNode destination = destinations.remove();
-
-			
 			int cost = destination.smallestCost;
 			System.out.format("%17s", destination);
 
@@ -119,28 +107,26 @@ public class Solver {
 				System.out.format("%17s", "-1");
 			}
 			System.out.println();
-
 		}
-
 	}
 
-	private static List<RouterNode> getShortestPath(RouterNode destination, int routerCount) {
-
+	private static List<RouterNode> getShortestPath(RouterNode destination) {
+		//gets the shortest path to a node
 		List<RouterNode> order = new ArrayList<RouterNode>();
-
+		//start at target
 		RouterNode current = destination.previous;
-		
+
 		while (current != null) {
-			
+			//work backwards
 			order.add(current);
 			if (current.previous != null)
 				current = current.previous;
 			else
 				current = null;
 		}
-
+		//since we start at the end reverse the order
 		Collections.reverse(order);
-	
+
 		return order;
 	}
 
@@ -163,14 +149,12 @@ public class Solver {
 		// itself
 		source.smallestCost = 0;
 
-		// Implementation:
-		// http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Using_a_priority_queue
 
 		PriorityQueue<RouterNode> q = new PriorityQueue<RouterNode>();
 
 		// Add only the source
 		q.add(source);
-		
+
 		while (!q.isEmpty()) {
 
 			RouterNode smallestNode = q.poll();
@@ -190,53 +174,51 @@ public class Solver {
 		}
 
 	}
+
 	/**
 	 * A basic implementation of a weighted, directed graph
+	 * 
 	 * @author Vaughan Hilts
 	 *
 	 */
 	public static class WeightedDirectedGraph {
 
-		// A list of nodes to keep inside the graph, this will be constructed from the edges
+		// A list of nodes to keep inside the graph, this will be constructed
+		// from the edges
 		private List<RouterNode> _nodes = new ArrayList<RouterNode>();
-		
-		
+
 	}
+
 	/**
 	 * A generic implementation of a graph edge
+	 * 
 	 * @author Vaughan Hilts
 	 *
 	 */
 	public static class GraphEdge {
 
-		// 
+		//edge goes somewhere
 		private final RouterNode _to;
+		//edge has a cost
 		private final int _cost;
 		
-
 		public RouterNode getTo() {
 			return _to;
 		}
-
+		
 		public int getCost() {
 			return _cost;
 		}
-
-		public GraphEdge(RouterNode _to, int _cost) {	
+		public GraphEdge(RouterNode _to, int _cost) {
 			this._to = _to;
 			this._cost = _cost;
 		}
-		
-		
-		
-		
-		
-		
 	}
 
 	/**
-	 * Represents a single node for a router, keeps a list of the edges connected to it
-	 * when needed
+	 * Represents a single node for a router, keeps a list of the edges
+	 * connected to it when needed
+	 * 
 	 * @author Vaughan Hilts
 	 *
 	 */
@@ -245,44 +227,36 @@ public class Solver {
 		// This is mostly used for keeping track of RouterNode's internally
 		private static int _internalNameCounter = 1;
 		private int _name;
-		
+
 		private List<GraphEdge> _edges = new ArrayList<GraphEdge>();
-		
+
 		public int smallestCost = Integer.MAX_VALUE;
 		public RouterNode previous = null;
 
 		public RouterNode() {
-			
 			// Assign the name
 			_name = _internalNameCounter;
-			
 			// Increment the internal counter
 			_internalNameCounter++;
 		}
-		
-		
-		
-		
+
 		public List<GraphEdge> getEdges() {
 			return _edges;
 		}
-		
+
 		public void addEdge(GraphEdge edge) {
 			_edges.add(edge);
 		}
-
 
 		@Override
 		public int compareTo(RouterNode o) {
 			// TODO: Implement if it's actually needed
 			return Integer.compare(this.smallestCost, o.smallestCost);
 		}
-		
+
 		@Override
 		public String toString() {
 			return Integer.toString(_name);
 		}
-
-		
 	}
 }
