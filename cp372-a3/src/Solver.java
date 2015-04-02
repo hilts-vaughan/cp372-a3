@@ -190,5 +190,99 @@ public class Solver {
 		}
 
 	}
+	/**
+	 * A basic implementation of a weighted, directed graph
+	 * @author Vaughan Hilts
+	 *
+	 */
+	public static class WeightedDirectedGraph {
 
+		// A list of nodes to keep inside the graph, this will be constructed from the edges
+		private List<RouterNode> _nodes = new ArrayList<RouterNode>();
+		
+		
+	}
+	/**
+	 * A generic implementation of a graph edge
+	 * @author Vaughan Hilts
+	 *
+	 */
+	public static class GraphEdge {
+
+		// 
+		private final RouterNode _to;
+		private final int _cost;
+		
+
+		public RouterNode getTo() {
+			return _to;
+		}
+
+		public int getCost() {
+			return _cost;
+		}
+
+		public GraphEdge(RouterNode _to, int _cost) {	
+			this._to = _to;
+			this._cost = _cost;
+		}
+		
+		
+		
+		
+		
+		
+	}
+
+	/**
+	 * Represents a single node for a router, keeps a list of the edges connected to it
+	 * when needed
+	 * @author Vaughan Hilts
+	 *
+	 */
+	public static class RouterNode implements Comparable<RouterNode> {
+
+		// This is mostly used for keeping track of RouterNode's internally
+		private static int _internalNameCounter = 1;
+		private int _name;
+		
+		private List<GraphEdge> _edges = new ArrayList<GraphEdge>();
+		
+		public int smallestCost = Integer.MAX_VALUE;
+		public RouterNode previous = null;
+
+		public RouterNode() {
+			
+			// Assign the name
+			_name = _internalNameCounter;
+			
+			// Increment the internal counter
+			_internalNameCounter++;
+		}
+		
+		
+		
+		
+		public List<GraphEdge> getEdges() {
+			return _edges;
+		}
+		
+		public void addEdge(GraphEdge edge) {
+			_edges.add(edge);
+		}
+
+
+		@Override
+		public int compareTo(RouterNode o) {
+			// TODO: Implement if it's actually needed
+			return Integer.compare(this.smallestCost, o.smallestCost);
+		}
+		
+		@Override
+		public String toString() {
+			return Integer.toString(_name);
+		}
+
+		
+	}
 }
