@@ -37,10 +37,8 @@ public class Solver {
 		for (int i = 0; i < routerCount; i++) {
 			rows.add(scanner.nextLine());
 		}
-		System.out.println(rows);
 		scanner.close();
-		String[] values;// = String>();//{ a, b, c, d };
-
+		String[] values;
 		// Add a sample graph we know about
 		List<RouterNode> nodes = new ArrayList<RouterNode>();// { a, b, c, d };
 		for (int i = 0; i < routerCount; i++) {
@@ -60,17 +58,6 @@ public class Solver {
 			}
 		}
 
-		System.out.println(nodes);
-		/*
-		 * RouterNode a = new RouterNode(); RouterNode b = new RouterNode();
-		 * RouterNode c = new RouterNode(); RouterNode d = new RouterNode();
-		 * 
-		 * // Set it up so starting from A you should be able to traverse to D
-		 * a.addEdge(new GraphEdge(b, 5)); b.addEdge(new GraphEdge(a, 6));
-		 * b.addEdge(new GraphEdge(c, 10)); c.addEdge(new GraphEdge(d, 12));
-		 * 
-		 * d.addEdge(new GraphEdge(a, 112));
-		 */
 		// Create our structure
 
 		for (RouterNode source : nodes) {
