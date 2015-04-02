@@ -77,14 +77,11 @@ public class Solver {
 				if (destination == source)
 					continue;
 
-				System.out.println(source + " to " + destination);
 
 				// Gets the shortest path to the destination from this source
 				List<RouterNode> shortestPath = getShortestPath(destination, routerCount);
 
 				totalPaths.add((ArrayList<RouterNode>) shortestPath);
-
-				System.out.println(shortestPath);
 
 				destinations.add(destination);
 			}
