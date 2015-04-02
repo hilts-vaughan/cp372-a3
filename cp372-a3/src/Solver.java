@@ -146,7 +146,7 @@ public class Solver {
 
 		RouterNode current = destination.previous;
 		
-		while (current != null && order.size()<=routerCount) {
+		while (current != null) {
 			
 			order.add(current);
 			if (current.previous != null)
@@ -156,9 +156,7 @@ public class Solver {
 		}
 
 		Collections.reverse(order);
-		if (order.size()>routerCount){
-			order=new ArrayList<RouterNode>();
-		}
+	
 		return order;
 	}
 
@@ -186,15 +184,9 @@ public class Solver {
 
 		PriorityQueue<RouterNode> q = new PriorityQueue<RouterNode>();
 
-		for (RouterNode node : nodes) {
-			if (node != source) {
-				node.smallestCost = Integer.MAX_VALUE;
-				node.previous = null;
-			}
-
-			q.add(node);
-		} // initial setup loop
-
+		// Add only the source
+		q.add(source);
+		
 		while (!q.isEmpty()) {
 
 			RouterNode smallestNode = q.poll();
